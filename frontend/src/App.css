@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --background-color: #f8f9fa;
+  --text-color: #212529;
+  --card-bg: #fff;
+  --card-border-color: rgba(0,0,0,.125);
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+}
+
+.dark {
+  --background-color: #121212;
+  --text-color: #fff;
+  --card-bg: #1e1e1e;
+  --card-border-color: rgba(255,255,255,.125);
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.App {
+  margin-top: 20px;
+}
+
+.card {
+    border: 1px solid var(--card-border-color);
+    background-color: var(--card-bg);
+    box-shadow: 0 0 1.25rem rgba(31,45,61,.08);
+}
+
+.dark .card {
+  color: var(--text-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.plus-icon {
+    stroke-width: 1; /* Adjust as needed for desired thinness */
+    stroke: currentColor; /* Ensures the stroke color matches the icon color */
+}
+
+.table {
+    color: var(--text-color);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: var(--bs-table-striped-color);
+}
+
+.dark .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: #2c2c2c;
+}
+
+.dark .table {
+    color: var(--text-color);
+    background-color: var(--card-bg);
+    border-color: var(--card-border-color);
+}
+
+.dark .table th,
+.dark .table td {
+    border-color: var(--card-border-color);
+    background-color: var(--card-bg); /* Explicitly set background for cells */
+    color: var(--text-color); /* Ensure text color is light */
+}
+
+.dark .table thead th {
+    background-color: #2c2c2c; /* A slightly different dark shade for the header */
+    color: var(--text-color);
+}
+
+.dark .table tbody tr {
+    background-color: var(--card-bg); /* Explicitly set background for rows */
+    color: var(--text-color);
+}
+
+.dark .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #2c2c2c; /* Darker shade for striped rows */
+    color: var(--text-color);
+}
+
+.dark .table-hover > tbody > tr:hover > * {
+    background-color: #3c3c3c; /* Even darker for hover effect */
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.dark .modal-header, .dark .modal-footer {
+    border-bottom-color: var(--card-border-color);
+    border-top-color: var(--card-border-color);
+}
+
+.dark .form-control {
+    background-color: #2c2c2c;
+    color: var(--text-color);
+    border-color: var(--card-border-color);
+}
+
+.dark .form-control:focus {
+    background-color: #3c3c3c;
+    color: var(--text-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.dark .form-select {
+    background-color: #2c2c2c;
+    color: var(--text-color);
+    border-color: var(--card-border-color);
+}
+
+.form-check-input {
+    border-color: #adb5bd;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.dark .form-check-input {
+    background-color: #2c2c2c;
+    border-color: var(--card-border-color);
+}
+
+.dark .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.dark .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Lighter placeholder text for dark mode */
+}
+
+/* Hide spin buttons for number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}

@@ -1,0 +1,19 @@
+{
+  "name": "agendacelushop",
+  "version": "1.0.0",
+  "description": "Agenda CeluShop",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend",
+    "dev": "concurrently \"cross-env PORT=3001 npm run start --prefix backend\" \"npm start --prefix frontend\"",
+    "heroku-postbuild": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
+  }
+}
