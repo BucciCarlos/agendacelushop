@@ -12,9 +12,12 @@ import dbConnect from './config/db.js';
 import User from './models/User.js';
 import Contact from './models/Contact.js'; // Import the new Contact model
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // --- Legacy file DB logic (commented out) ---
 // import fs from 'fs';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 // const DB_FILE = path.join(__dirname, 'db.json');
 // const readDb = () => JSON.parse(fs.readFileSync(DB_FILE));
 // const writeDb = (data) => fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
