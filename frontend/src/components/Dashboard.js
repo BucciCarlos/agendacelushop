@@ -60,7 +60,7 @@ function Dashboard({ theme, toggleTheme }) {
   };
 
   const fetchContacts = useCallback(() => {
-    api.get('/api/contacts', { 
+    api.get('/contacts', { 
         params: { ...filters, page: pagination.currentPage }
     })
       .then(response => {
@@ -117,7 +117,7 @@ function Dashboard({ theme, toggleTheme }) {
   };
 
   const handleConfirmDelete = () => {
-    api.delete(`/api/contacts/${contactToDeleteId}`)
+    api.delete(`/contacts/${contactToDeleteId}`)
       .then(() => {
         fetchContacts();
         setShowConfirmDeleteModal(false);
@@ -173,19 +173,19 @@ function Dashboard({ theme, toggleTheme }) {
     };
 
     if (modalType === 'add') {
-        api.post('/api/contacts', contactData)
+        api.post('/contacts', contactData)
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
             });
     } else if (modalType === 'edit') {
-        api.put(`/api/contacts/${currentContact.id}`, contactData)
+        api.put(`/contacts/${currentContact.id}`, contactData)
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
             });
     } else if (modalType === 'comments') {
-        api.put(`/api/contacts/${currentContact.id}/comments`, { comments: data.comments })
+        api.put(`/contacts/${currentContact.id}/comments`, { comments: data.comments })
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
@@ -197,17 +197,17 @@ function Dashboard({ theme, toggleTheme }) {
     setIsLoading(true);
     setImportMessage(null);
     setImportErrors([]);
-    api.get('/api/contacts?all=true')
+    api.get('/contacts?all=true')
       .then(response => {
-        const contactsToExport = response.data.contacts.map(contact => ({
+        const contactsToExport = (response.data.contacts || []).map(contact => ({
           'Nombre': contact.name,
           'Apellido': contact.lastname,
           'DNI': contact.dni,
-          'Telefono Personal': contact.phones.find(p => p.type === 'personal')?.number || '',
-          'Telefono Familiar': contact.phones.find(p => p.type === 'family')?.number || '',
-          'Nombre del Familiar': contact.phones.find(p => p.type === 'family')?.relativeName || '',
-          'N° de Venta': contact.sales.map(s => s.saleNumber).join(', '),
-          'Fecha de Venta': contact.sales.map(s => s.date).join(', '),
+          'Telefono Personal': (contact.phones || []).find(p => p.type === 'personal')?.number || '',
+          'Telefono Familiar': (contact.phones || []).find(p => p.type === 'family')?.number || '',
+          'Nombre del Familiar': (contact.phones || []).find(p => p.type === 'family')?.relativeName || '',
+          'N° de Venta': (contact.sales || []).map(s => s.saleNumber).join(', '),
+          'Fecha de Venta': (contact.sales || []).map(s => s.date).join(', '),
           'Comentarios': contact.comments,
           'Fecha': new Date(contact.date).toLocaleDateString()
         }));
@@ -243,7 +243,7 @@ function Dashboard({ theme, toggleTheme }) {
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
         
-        api.post('/api/contacts/import', json)
+        api.post('/contacts/import', json)
           .then(response => {
             fetchContacts();
             setImportMessage({ type: 'success', text: response.data.message || 'Contactos importados exitosamente!' });
@@ -346,16 +346,16 @@ function Dashboard({ theme, toggleTheme }) {
           </tr>
         </thead>
         <tbody>
-          {contacts.map(contact => (
+          {(contacts || []).map(contact => (
             <tr key={contact.id}>
               <td>{new Date(contact.date).toLocaleDateString()}</td>
-              <td>{contact.sales.length > 0 ? contact.sales.map(s => s.saleNumber).join(', ') : '--'}</td>
+              <td>{contact.sales?.map(s => s.saleNumber).join(', ') || '--'}</td>
               <td>{contact.name}</td>
               <td>{contact.lastname}</td>
               <td>{contact.dni}</td>
-              <td style={{ width: '210px', whiteSpace: 'nowrap' }}>{contact.phones.map(p => p.number).join(' ')}</td>
+              <td style={{ width: '210px', whiteSpace: 'nowrap' }}>{contact.phones?.map(p => p.number).join(' ') || ''}</td>
               <td className="d-flex" style={{ width: '200px', whiteSpace: 'nowrap' }}>
-                <Button variant="success" className="me-1" href={`https://wa.me/549${contact.phones.find(p => p.type === 'personal')?.number || contact.phones.find(p => p.type === 'family')?.number}`} target="_blank"><FaWhatsapp /></Button>
+                <Button variant="success" className="me-1" href={`https://wa.me/549${(contact.phones || []).find(p => p.type === 'personal')?.number || (contact.phones || []).find(p => p.type === 'family')?.number || ''}`} target="_blank"><FaWhatsapp /></Button>
                 <Button variant={contact.comments ? "success" : "secondary"} className="me-1" onClick={() => handleShowModal('comments', contact)}><FaComment /></Button>
                 <Button variant="warning" className="me-1" onClick={() => handleShowModal('edit', contact)}><FaEdit /></Button>
                 <Button variant="danger" onClick={() => handleDelete(contact.id)}><FaTrash /></Button>
@@ -425,7 +425,7 @@ function Dashboard({ theme, toggleTheme }) {
                         <Col md={6}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Teléfono Personal</Form.Label>
-                                <Form.Control name="phone1" type="number" defaultValue={currentContact?.phones.find(p=>p.type==='personal')?.number} />
+                                <Form.Control name="phone1" type="number" defaultValue={currentContact?.phones?.find(p=>p.type==='personal')?.number || ''} />
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -439,13 +439,13 @@ function Dashboard({ theme, toggleTheme }) {
                         <Col md={6}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nombre del Familiar</Form.Label>
-                                <Form.Control name="relativeName" defaultValue={currentContact?.phones.find(p=>p.type==='family')?.relativeName} />
+                                <Form.Control name="relativeName" defaultValue={currentContact?.phones?.find(p=>p.type==='family')?.relativeName || ''} />
                             </Form.Group>
                         </Col>
                         <Col md={6}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Teléfono Familiar</Form.Label>
-                                <Form.Control name="phone2" type="number" defaultValue={currentContact?.phones.find(p=>p.type==='family')?.number} />
+                                <Form.Control name="phone2" type="number" defaultValue={currentContact?.phones?.find(p=>p.type==='family')?.number || ''} />
                             </Form.Group>
                         </Col>
                     </Row>

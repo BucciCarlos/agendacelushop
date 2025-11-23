@@ -1,8 +1,15 @@
 [build]
-  base = "frontend"
   command = "npm run build"
-  publish = "build"
+  publish = "frontend/build"     # Aseguramos que apunte a la carpeta correcta
+  functions = "netlify/functions"
 
+# Redirección de API (Vital para el Login)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# Redirección de React (Vital para que no de 404 al recargar)
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -9,7 +9,7 @@ function Login({ onLogin }) {
   const handleLogin = (e) => {
     e.preventDefault();
     setError(''); // Reset error on new attempt
-    api.post('/api/login', { username, password })
+    api.post('/login', { username, password })
       .then(response => {
         if (response.data.success) {
           onLogin();

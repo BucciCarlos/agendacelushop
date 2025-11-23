@@ -25,21 +25,7 @@ const app = express();
 const PORT = process.env.PORT || 3001; // Changed default to 3001 to avoid conflict
 
 // 3. Connect to Database
-dbConnect().then(async () => {
-  // Seed the database with the default user if it doesn't exist
-  try {
-    const existingUser = await User.findOne({ username: 'BucciC' });
-    if (!existingUser) {
-      const newUser = new User({ username: 'BucciC', password: '38643325' });
-      await newUser.save();
-      console.log('✅ Default user created!');
-    } else {
-      console.log('ℹ️ Default user already exists.');
-    }
-  } catch (error) {
-    console.error('🔥 Error seeding database:', error);
-  }
-});
+// Connection logic is moved to the serverless function handler to prevent race conditions.
 
 
 // 4. Middleware
@@ -56,9 +42,16 @@ app.use(bodyParser.json());
 app.post('/api/login', async (req, res) => {
     console.log('Login attempt received. Body:', req.body);
     const { username, password } = req.body;
+    console.log('1. Body recibido:', req.body);
 
     try {
         const user = await User.findOne({ username });
+        console.log('2. Usuario encontrado en DB:', user);
+
+        console.log('3. Password DB:', user ? user.password : 'N/A');
+        console.log('4. Password Body:', password);
+        console.log('5. Son iguales?:', user && user.password === password);
+        
         if (user && user.password === password) { // IMPORTANT: Replace with hashed password comparison in production
             console.log('Found user:', user);
             res.json({ success: true, message: 'Login successful' });
@@ -249,6 +242,8 @@ app.get('*', (req, res) => {
 
 
 // 7. Start Server
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`🚀 Server running on http://localhost:${PORT}`);
+// });
+
+export default app;
