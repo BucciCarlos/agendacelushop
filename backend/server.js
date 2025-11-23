@@ -12,8 +12,8 @@ import dbConnect from './config/db.js';
 import User from './models/User.js';
 import Contact from './models/Contact.js'; // Import the new Contact model
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const currentFilename = fileURLToPath(import.meta.url);
+const currentDirname = path.dirname(currentFilename);
 
 // --- Legacy file DB logic (commented out) ---
 // import fs from 'fs';
@@ -236,7 +236,7 @@ app.put('/api/contacts/:id/comments', async (req, res) => {
 
 
 // 6. Serve Frontend
-const frontendBuildPath = path.join(__dirname, '../frontend/build');
+const frontendBuildPath = path.join(currentDirname, '../frontend/build');
 app.use(express.static(frontendBuildPath));
 
 app.get('*', (req, res) => {

@@ -1,5 +1,6 @@
 {
   "name": "agendacelushop",
+  "type": "module",
   "version": "1.0.0",
   "description": "Agenda CeluShop",
   "main": "index.js",
