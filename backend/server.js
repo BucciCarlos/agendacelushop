@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 // 5. API Endpoints
 
 // --- AUTHENTICATION ---
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     console.log('Login attempt received. Body:', req.body);
     const { username, password } = req.body;
     console.log('1. Body recibido:', req.body);
@@ -66,7 +66,7 @@ app.post('/api/login', async (req, res) => {
 
 // --- CONTACTS (Mongoose based endpoints) ---
 
-app.get('/api/contacts', async (req, res) => {
+app.get('/contacts', async (req, res) => {
     try {
         const { name, lastname, saleNumber, dni, date, startDate, endDate, all } = req.query;
         let query = {};
@@ -115,7 +115,7 @@ app.get('/api/contacts', async (req, res) => {
     }
 });
 
-app.post('/api/contacts', async (req, res) => {
+app.post('/contacts', async (req, res) => {
     try {
         const newContact = await Contact.create(req.body);
         res.status(201).json(newContact);
@@ -125,7 +125,7 @@ app.post('/api/contacts', async (req, res) => {
     }
 });
 
-app.post('/api/contacts/import', async (req, res) => {
+app.post('/contacts/import', async (req, res) => {
     try {
         const importedContactsData = req.body;
         const newContacts = [];
@@ -186,7 +186,7 @@ app.post('/api/contacts/import', async (req, res) => {
 });
 
 
-app.put('/api/contacts/:id', async (req, res) => {
+app.put('/contacts/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const updatedContact = await Contact.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
@@ -200,7 +200,7 @@ app.put('/api/contacts/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/contacts/:id', async (req, res) => {
+app.delete('/contacts/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const deletedContact = await Contact.findByIdAndDelete(id);
@@ -214,7 +214,7 @@ app.delete('/api/contacts/:id', async (req, res) => {
     }
 });
 
-app.put('/api/contacts/:id/comments', async (req, res) => {
+app.put('/contacts/:id/comments', async (req, res) => {
     try {
         const { id } = req.params;
         const { comments } = req.body;
