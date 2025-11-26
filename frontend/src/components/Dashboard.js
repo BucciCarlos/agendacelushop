@@ -179,13 +179,13 @@ function Dashboard({ theme, toggleTheme }) {
                 handleCloseModal();
             });
     } else if (modalType === 'edit') {
-        api.put(`/contacts/${currentContact.id}`, contactData)
+        api.put(`/contacts/${currentContact._id}`, contactData)
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
             });
     } else if (modalType === 'comments') {
-        api.put(`/contacts/${currentContact.id}/comments`, { comments: data.comments })
+        api.put(`/contacts/${currentContact._id}/comments`, { comments: data.comments })
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
@@ -347,7 +347,7 @@ function Dashboard({ theme, toggleTheme }) {
         </thead>
         <tbody>
           {(contacts || []).map(contact => (
-            <tr key={contact.id}>
+            <tr key={contact._id}>
               <td>{new Date(contact.date).toLocaleDateString()}</td>
               <td>{contact.sales?.map(s => s.saleNumber).join(', ') || '--'}</td>
               <td>{contact.name}</td>
@@ -358,7 +358,7 @@ function Dashboard({ theme, toggleTheme }) {
                 <Button variant="success" className="me-1" href={`https://wa.me/549${(contact.phones || []).find(p => p.type === 'personal')?.number || (contact.phones || []).find(p => p.type === 'family')?.number || ''}`} target="_blank"><FaWhatsapp /></Button>
                 <Button variant={contact.comments ? "success" : "secondary"} className="me-1" onClick={() => handleShowModal('comments', contact)}><FaComment /></Button>
                 <Button variant="warning" className="me-1" onClick={() => handleShowModal('edit', contact)}><FaEdit /></Button>
-                <Button variant="danger" onClick={() => handleDelete(contact.id)}><FaTrash /></Button>
+                <Button variant="danger" onClick={() => handleDelete(contact._id)}><FaTrash /></Button>
               </td>
             </tr>
           ))}

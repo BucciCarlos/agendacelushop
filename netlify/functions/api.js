@@ -1,12 +1,12 @@
-import serverless from 'serverless-http';
-import app from '../../backend/server.js';
-import dbConnect from '../../backend/config/db.js';
-import User from '../../backend/models/User.js';
+const serverless = require('serverless-http');
+const app = require('../../backend/server.js');
+const dbConnect = require('../../backend/config/db.js');
+const User = require('../../backend/models/User.js');
 
 let isSeeded = false;
 
 // Wrap the entire handler in an async function
-export const handler = async (event, context) => {
+exports.handler = async (event, context) => {
   // Ensure the DB is connected before processing any request
   await dbConnect();
 

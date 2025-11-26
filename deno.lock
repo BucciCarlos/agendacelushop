@@ -11,8 +11,14 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:bcryptjs@^3.0.3",
         "npm:concurrently@^8.2.2",
-        "npm:cross-env@^7.0.3"
+        "npm:cors@^2.8.5",
+        "npm:cross-env@^7.0.3",
+        "npm:dotenv@^17.2.3",
+        "npm:express@^5.1.0",
+        "npm:mongoose@9",
+        "npm:serverless-http@4"
       ]
     }
   }

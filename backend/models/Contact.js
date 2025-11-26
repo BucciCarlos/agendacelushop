@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const PhoneSchema = new mongoose.Schema({
   type: { type: String, enum: ['personal', 'family'], default: 'personal' },
@@ -24,4 +24,4 @@ const ContactSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }, // Convert to Date type
 });
 
-export default mongoose.models.Contact || mongoose.model('Contact', ContactSchema);
+module.exports = mongoose.model('Contact', ContactSchema);

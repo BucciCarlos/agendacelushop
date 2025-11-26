@@ -1,19 +1,16 @@
 // 1. Import dependencies
-import 'dotenv/config'; // Must be the first import
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
+require('dotenv').config(); // Must be the first import
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
 // import { v4 as uuidv4 } from 'uuid'; // No longer needed for Contacts as Mongoose generates _id
 
 // Import DB connection and Models
-import dbConnect from './config/db.js';
-import User from './models/User.js';
-import Contact from './models/Contact.js'; // Import the new Contact model
+const dbConnect = require('./config/db.js');
+const User = require('./models/User.js');
+const Contact = require('./models/Contact.js'); // Import the new Contact model
 
-const currentFilename = fileURLToPath(import.meta.url);
-const currentDirname = path.dirname(currentFilename);
 
 // --- Legacy file DB logic (commented out) ---
 // import fs from 'fs';
@@ -53,15 +50,13 @@ app.post('/api/login', async (req, res) => {
 
         console.log('3. Password DB:', user ? user.password : 'N/A');
         console.log('4. Password Body:', password);
-        console.log('5. Son iguales?:', user && user.password === password);
-        
-        if (user && user.password === password) { // IMPORTANT: Replace with hashed password comparison in production
-            console.log('Found user:', user);
-            res.json({ success: true, message: 'Login successful' });
-        } else {
+        if (!user || user.password.trim() !== password.trim()) {
             console.log('User not found or password incorrect');
-            res.status(401).json({ success: false, message: 'Invalid credentials' });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
+        
+        console.log('Found user:', user);
+        res.json({ success: true, message: 'Login successful' });
     } catch (error) {
         console.error('🔥 Error during login:', error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -236,7 +231,7 @@ app.put('/api/contacts/:id/comments', async (req, res) => {
 
 
 // 6. Serve Frontend
-const frontendBuildPath = path.join(currentDirname, '../frontend/build');
+const frontendBuildPath = path.join(__dirname, '../frontend/build');
 app.use(express.static(frontendBuildPath));
 
 app.get('*', (req, res) => {
@@ -249,4 +244,4 @@ app.get('*', (req, res) => {
 //     console.log(`🚀 Server running on http://localhost:${PORT}`);
 // });
 
-export default app;
+module.exports = app;
