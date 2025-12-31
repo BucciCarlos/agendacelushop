@@ -3,6 +3,9 @@
   publish = "frontend/build"     # Aseguramos que apunte a la carpeta correcta
   functions = "netlify/functions"
 
+[build.environment]
+  NODE_VERSION = "20"
+
 # Redirección de API (Vital para el Login)
 [[redirects]]
   from = "/api/*"
