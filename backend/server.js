@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const jwt = require('jsonwebtoken');
 // import { v4 as uuidv4 } from 'uuid'; // No longer needed for Contacts as Mongoose generates _id
 
 // Import DB connection and Models
@@ -56,7 +57,8 @@ app.post('/login', async (req, res) => {
         }
         
         console.log('Found user:', user);
-        res.json({ success: true, message: 'Login successful' });
+        const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '5h' });
+        res.json({ success: true, message: 'Login successful', token });
     } catch (error) {
         console.error('🔥 Error during login:', error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -80,7 +82,8 @@ app.post('/api/login', async (req, res) => {
         }
         
         console.log('Found user:', user);
-        res.json({ success: true, message: 'Login successful' });
+        const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '5h' });
+        res.json({ success: true, message: 'Login successful', token });
     } catch (error) {
         console.error('🔥 Error during login:', error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -104,7 +107,8 @@ app.post('/.netlify/functions/api/login', async (req, res) => {
         }
         
         console.log('Found user:', user);
-        res.json({ success: true, message: 'Login successful' });
+        const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '5h' });
+        res.json({ success: true, message: 'Login successful', token });
     } catch (error) {
         console.error('🔥 Error during login:', error);
         res.status(500).json({ success: false, message: 'Server error' });

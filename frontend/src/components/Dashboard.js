@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import { Table, Button, Modal, Form, Pagination, Container, Row, Col, Card, Collapse } from 'react-bootstrap';
-import { FaWhatsapp, FaComment, FaEdit, FaTrash, FaPlusCircle, FaCog } from 'react-icons/fa';
+import { FaWhatsapp, FaComment, FaEdit, FaTrash, FaPlusCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import Settings from './Settings';
 import * as XLSX from 'xlsx';
 
-function Dashboard({ theme, toggleTheme }) {
+function Dashboard({ theme, toggleTheme, onLogout }) {
   const [contacts, setContacts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(''); // 'add', 'edit', 'comments'
@@ -277,6 +277,7 @@ function Dashboard({ theme, toggleTheme }) {
         <Col className="d-flex justify-content-end align-items-center">
           <Button onClick={() => handleShowModal('add')} className="rounded-circle d-flex align-items-center justify-content-center me-2" style={{ width: '50px', height: '50px', padding: '0' }}><FaPlusCircle className="plus-icon" style={{ fontSize: '36px' }} /></Button>
           <Button onClick={() => setShowSettings(true)} className="rounded-circle d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px', padding: '0' }}><FaCog style={{ fontSize: '20px' }} /></Button>
+          <Button onClick={onLogout} className="rounded-circle d-flex align-items-center justify-content-center ms-2" variant="danger" style={{ width: '36px', height: '36px', padding: '0' }} title="Cerrar Sesión"><FaSignOutAlt style={{ fontSize: '18px' }} /></Button>
         </Col>
       </Row>
 

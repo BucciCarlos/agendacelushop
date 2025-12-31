@@ -12,6 +12,7 @@ function Login({ onLogin }) {
     api.post('/login', { username, password })
       .then(response => {
         if (response.data.success) {
+          localStorage.setItem('token', response.data.token);
           onLogin();
         } else {
           // This case might not be reached if the server sends a 401, but included for safety.

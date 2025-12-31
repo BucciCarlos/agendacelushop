@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   const toggleTheme = () => {
@@ -22,9 +22,14 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="App">
-      {isLoggedIn ? <Dashboard theme={theme} toggleTheme={toggleTheme} /> : <Login onLogin={handleLogin} />}
+      {isLoggedIn ? <Dashboard theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} /> : <Login onLogin={handleLogin} />}
     </div>
   );
 }
