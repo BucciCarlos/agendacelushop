@@ -16,7 +16,7 @@ const ContactSchema = new mongoose.Schema({
   // If the frontend needs the string uuid, we might add a virtual or a separate field later.
   // For now, we assume _id is sufficient.
   name: { type: String, required: true },
-  lastname: { type: String, required: true },
+  lastname: { type: String },
   dni: { type: String, default: '' },
   phones: [PhoneSchema],
   sales: [SaleSchema],
