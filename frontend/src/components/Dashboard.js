@@ -384,7 +384,7 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
       </Pagination>
 
       <footer className="mt-4 text-center">
-        <p>&copy; {new Date().getFullYear()} Soluciones Bucci. Todos los derechos reservados.</p>
+        <p>&copy; {new Date().getFullYear()} Bucci IT Solutions. Todos los derechos reservados.</p>
       </footer>
 
       <Modal show={showConfirmDeleteModal} onHide={handleCloseConfirmDeleteModal}>
