@@ -5,33 +5,33 @@ function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setError(''); // Reset error on new attempt
+    setError('');
+    setLoading(true);
+
     api.post('/login', { username, password })
       .then(response => {
         if (response.data.success) {
           localStorage.setItem('token', response.data.token);
           onLogin();
         } else {
-          // This case might not be reached if the server sends a 401, but included for safety.
           setError('Credenciales inválidas.');
         }
       })
       .catch((error) => {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx (e.g., 401 Unauthorized)
           setError('Credenciales inválidas. Por favor, verifique su usuario y contraseña.');
         } else if (error.request) {
-          // The request was made but no response was received.
-          // This is a network error (e.g., backend is down, wrong API URL, CORS issue)
           setError('Error de red. No se pudo conectar al servidor. Verifique la configuración de la API.');
         } else {
-          // Something happened in setting up the request that triggered an Error
           setError(`Un error ocurrió: ${error.message}`);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -64,7 +64,14 @@ function Login({ onLogin }) {
                   />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-100" 
+                  disabled={loading}
+                  style={{ opacity: loading ? 0.5 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+                >
+                  {loading ? 'Ingresando...' : 'Ingresar'}
+                </button>
               </form>
             </div>
           </div>

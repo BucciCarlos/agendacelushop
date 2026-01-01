@@ -21,6 +21,7 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
   const [importErrors, setImportErrors] = useState([]);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
   const [contactToDeleteId, setContactToDeleteId] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleHasSaleChange = (e) => {
     const isChecked = e.target.checked;
@@ -141,6 +142,8 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
+    setIsSaving(true);
+
     let contactDate = new Date(); // Default to now
     if (hasSale && sales.length > 0) {
       const saleDates = sales
@@ -172,24 +175,30 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
         date: contactDate,
     };
 
+    let request;
     if (modalType === 'add') {
-        api.post('/contacts', contactData)
-            .then(() => {
-                fetchContacts();
-                handleCloseModal();
-            });
+        request = api.post('/contacts', contactData);
     } else if (modalType === 'edit') {
-        api.put(`/contacts/${currentContact._id}`, contactData)
-            .then(() => {
-                fetchContacts();
-                handleCloseModal();
-            });
+        request = api.put(`/contacts/${currentContact._id}`, contactData);
     } else if (modalType === 'comments') {
-        api.put(`/contacts/${currentContact._id}/comments`, { comments: data.comments })
+        request = api.put(`/contacts/${currentContact._id}/comments`, { comments: data.comments });
+    }
+
+    if (request) {
+        request
             .then(() => {
                 fetchContacts();
                 handleCloseModal();
+            })
+            .catch(error => {
+                console.error('Error al guardar:', error);
+                // Aquí se podría agregar un estado de error visual si se desea
+            })
+            .finally(() => {
+                setIsSaving(false);
             });
+    } else {
+        setIsSaving(false);
     }
   };
 
@@ -411,7 +420,7 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Nombre</Form.Label>
+                                <Form.Label>Nombre <span style={{color: 'red'}}>*</span></Form.Label>
                                 <Form.Control name="name" defaultValue={currentContact?.name} required />
                             </Form.Group>
                         </Col>
@@ -425,8 +434,8 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Teléfono Personal</Form.Label>
-                                <Form.Control name="phone1" type="number" defaultValue={currentContact?.phones?.find(p=>p.type==='personal')?.number || ''} />
+                                <Form.Label>Teléfono Personal <span style={{color: 'red'}}>*</span></Form.Label>
+                                <Form.Control name="phone1" type="number" defaultValue={currentContact?.phones?.find(p=>p.type==='personal')?.number || ''} required />
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -506,7 +515,9 @@ function Dashboard({ theme, toggleTheme, onLogout }) {
                     </Collapse>
                 </>
             )}
-            <Button variant="primary" type="submit" className="mt-4">Guardar Cambios</Button>
+            <Button variant="primary" type="submit" className="mt-4" disabled={isSaving}>
+                {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
